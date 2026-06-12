@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل بيانات التواصل</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --green: #0f5c4d;
+  --green-dark: #0a4439;
+  --gold: #b08a4a;
+  --beige: #f7f3eb;
+  --text: #173d35;
+  --muted: #6f746f;
+  --border: #d9d2c4;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Tahoma, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(176,138,74,.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(15,92,77,.12), transparent 35%),
+    var(--beige);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+  color: var(--text);
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  min-height: 720px;
+  background: rgba(255,255,255,.94);
+  border: 1px solid rgba(176,138,74,.28);
+  border-radius: 38px;
+  box-shadow: 0 22px 60px rgba(40,35,25,.16);
+  padding: 34px 48px 42px;
+  overflow: hidden;
+}
+
+.page::before,
+.page::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  opacity: .08;
+  background:
+    linear-gradient(45deg, transparent 48%, var(--gold) 49%, var(--gold) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--gold) 49%, var(--gold) 51%, transparent 52%);
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+
+.page::before {
+  top: -80px;
+  right: -80px;
+}
+
+.page::after {
+  bottom: -80px;
+  left: -80px;
+}
+
+.top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.lang-buttons {
+  display: flex;
+  gap: 10px;
+  background: #fff;
+  padding: 8px;
+  border: 1px solid rgba(15,92,77,.14);
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
+
+.lang-buttons button {
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  padding: 11px 20px;
+  font-size: 17px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.lang-buttons button.active {
+  background: var(--green);
+  color: white;
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.museum-logo {
+  width: 250px;
+  max-width: 78%;
+  display: block;
+  margin: 0 auto 22px;
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.title-line {
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(to left, transparent, var(--gold), transparent);
+}
+
+.title-mark {
+  color: var(--gold);
+  font-size: 26px;
+}
+
+h1 {
+  font-size: 54px;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 30px;
+  color: var(--muted);
+  margin: 14px 0 34px;
+}
+
+.form {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: auto;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: start;
+  font-size: 23px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: var(--green);
+}
+
+.label-icon {
+  color: var(--gold);
+  font-size: 25px;
+}
+
+input {
+  width: 100%;
+  height: 76px;
+  border-radius: 18px;
+  border: 2px solid var(--border);
+  padding: 0 22px;
+  font-size: 26px;
+  outline: none;
+  direction: ltr;
+  text-align: left;
+  background: #fff;
+  color: #111;
+  transition: .2s;
+}
+
+input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 5px rgba(15,92,77,.08);
+}
+
+.iti {
+  width: 100%;
+  direction: ltr;
+}
+
+.iti input {
+  width: 100%;
+}
+
+.iti__country-list {
+  direction: ltr;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+.note {
+  margin-top: 9px;
+  font-size: 16px;
+  color: var(--muted);
+  text-align: start;
+}
+
+.submit {
+  margin-top: 26px;
+  width: 100%;
+  height: 82px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: white;
+  font-size: 29px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 26px rgba(15,92,77,.22);
+  transition: .2s;
+}
+
+.submit:hover {
+  transform: translateY(-1px);
+}
+
+.submit:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#msg {
+  margin-top: 24px;
+  min-height: 36px;
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.success {
+  color: #0a7a2f;
+}
+
+.error {
+  color: #b00020;
+}
+
+.footer-note {
+  position: relative;
+  z-index: 2;
+  margin-top: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .page {
+    min-height: auto;
+    padding: 22px 20px 30px;
+    border-radius: 26px;
+  }
+
+  .top {
+    justify-content: center;
+  }
+
+  .museum-logo {
+    width: 210px;
+    margin-bottom: 18px;
+  }
+
+  .title-line {
+    width: 50px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  .subtitle {
+    font-size: 23px;
+    margin-bottom: 26px;
+  }
+
+  label {
+    font-size: 20px;
+  }
+
+  input {
+    height: 68px;
+    font-size: 22px;
+  }
+
+  .submit {
+    height: 72px;
+    font-size: 25px;
+  }
+
+  #msg {
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="top">
+    <div class="lang-buttons">
+      <button id="arBtn" onclick="setLanguage('ar')">العربية</button>
+      <button id="enBtn" onclick="setLanguage('en')">English</button>
+    </div>
+  </div>
+
+  <div class="header">
+    <img class="museum-logo" src="https://tickets.asc.sa/storage/uploads/7qwP94FcoVHxdwkmKlHDsjCEwLdebQnCC94Z2lMG.png" alt="Museum Logo">
+
+    <div class="title-wrap">
+      <span class="title-line"></span>
+      <span class="title-mark">✦</span>
+      <h1 id="title">مرحباً بك</h1>
+      <span class="title-mark">✦</span>
+      <span class="title-line"></span>
+    </div>
+
+    <div class="subtitle" id="subtitle">الرجاء إدخال بيانات التواصل</div>
+  </div>
+
+  <form class="form" id="customerForm">
+    <div class="field">
+      <label id="emailLabel" for="email"><span class="label-icon">✉</span> البريد الإلكتروني</label>
+      <input id="email" type="email" placeholder="example@email.com" autocomplete="email" required>
+    </div>
+
+    <div class="field">
+      <label id="phoneLabel" for="phone"><span class="label-icon">☎</span> رقم الجوال</label>
+      <input id="phone" type="tel" autocomplete="tel" required>
+      <div class="note" id="phoneNote">اختر الدولة ثم أدخل رقم الجوال بدون مفتاح الدولة</div>
+    </div>
+
+    <button class="submit" id="submitBtn" type="submit">متابعة</button>
+  </form>
+
+  <div id="msg"></div>
+  <div class="footer-note" id="footerNote">يتم استخدام البيانات لغرض التواصل فقط</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
+
+<script>
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz7Zvz79-CgU13kqZmN2ypnG1u9506HMWJP6NViA_KGFyvZwvpo8E56M2QnaElFIiI/exec";
+let currentLanguage = localStorage.getItem("customer_form_lang") || "ar";
+
+const t = {
+  ar: {
+    dir: "rtl",
+    lang: "ar",
+    title: "مرحباً بك",
+    subtitle: "الرجاء إدخال بيانات التواصل",
+    emailLabel: "البريد الإلكتروني",
+    phoneLabel: "رقم الجوال",
+    phoneNote: "اختر الدولة ثم أدخل رقم الجوال بدون مفتاح الدولة",
+    footerNote: "يتم استخدام البيانات لغرض التواصل فقط",
+    button: "متابعة",
+    sending: "جاري الإرسال...",
+    success: "تم تسجيل البيانات بنجاح",
+    empty: "الرجاء إدخال البريد الإلكتروني ورقم الجوال",
+    invalidEmail: "الرجاء إدخال بريد إلكتروني صحيح",
+    invalidPhone: "رقم الجوال يجب أن يكون أرقام فقط ومن 6 إلى 15 رقم",
+    error: "حدث خطأ، حاول مرة أخرى"
+  },
+  en: {
+    dir: "ltr",
+    lang: "en",
+    title: "Welcome",
+    subtitle: "Please enter your contact details",
+    emailLabel: "Email Address",
+    phoneLabel: "Phone Number",
+    phoneNote: "Select the country, then enter the phone number without the country code",
+    footerNote: "Your information will be used for contact purposes only",
+    button: "Continue",
+    sending: "Sending...",
+    success: "Information Submitted Successfully",
+    empty: "Please enter email and phone number",
+    invalidEmail: "Please enter a valid email address",
+    invalidPhone: "Phone number must contain digits only and be 6 to 15 digits",
+    error: "Something went wrong. Please try again"
+  }
+};
+
+const phoneInput = document.querySelector("#phone");
+
+const iti = window.intlTelInput(phoneInput, {
+  initialCountry: "sa",
+  preferredCountries: ["sa", "ae", "kw", "qa", "bh", "om", "eg"],
+  separateDialCode: true,
+  nationalMode: true,
+  formatAsYouType: false
+});
+
+phoneInput.addEventListener("input", function() {
+  this.value = this.value.replace(/\D/g, "").slice(0, 15);
+});
+
+function setLanguage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem("customer_form_lang", lang);
+
+  document.documentElement.dir = t[lang].dir;
+  document.documentElement.lang = t[lang].lang;
+
+  document.getElementById("title").innerText = t[lang].title;
+  document.getElementById("subtitle").innerText = t[lang].subtitle;
+  document.getElementById("emailLabel").innerHTML = '<span class="label-icon">✉</span> ' + t[lang].emailLabel;
+  document.getElementById("phoneLabel").innerHTML = '<span class="label-icon">☎</span> ' + t[lang].phoneLabel;
+  document.getElementById("phoneNote").innerText = t[lang].phoneNote;
+  document.getElementById("footerNote").innerText = t[lang].footerNote;
+  document.getElementById("submitBtn").innerText = t[lang].button;
+
+  document.getElementById("arBtn").classList.toggle("active", lang === "ar");
+  document.getElementById("enBtn").classList.toggle("active", lang === "en");
+
+  clearMessage();
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isValidGeneralPhone(phone) {
+  return /^\d{6,15}$/.test(phone);
+}
+
+function showMessage(message, type) {
+  const msg = document.getElementById("msg");
+  msg.innerText = message;
+  msg.className = type;
+}
+
+function clearMessage() {
+  const msg = document.getElementById("msg");
+  msg.innerText = "";
+  msg.className = "";
+}
+
+document.getElementById("customerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const localPhone = phoneInput.value.replace(/\D/g, "");
+  const btn = document.getElementById("submitBtn");
+
+  if (!email || !localPhone) {
+    showMessage(t[currentLanguage].empty, "error");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showMessage(t[currentLanguage].invalidEmail, "error");
+    return;
+  }
+
+  if (!isValidGeneralPhone(localPhone)) {
+    showMessage(t[currentLanguage].invalidPhone, "error");
+    return;
+  }
+
+  const countryData = iti.getSelectedCountryData();
+  const countryCode = "+" + countryData.dialCode;
+  const fullPhone = countryCode + localPhone;
+  const countryName = countryData.name;
+  const countryIso = countryData.iso2.toUpperCase();
+
+  btn.disabled = true;
+  btn.innerText = t[currentLanguage].sending;
+  clearMessage();
+
+  fetch(WEBAPP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      email: email,
+      countryCode: countryCode,
+      phone: localPhone,
+      fullPhone: fullPhone,
+      countryName: countryName,
+      countryIso: countryIso,
+      language: currentLanguage === "ar" ? "Arabic" : "English"
+    })
+  })
+  .then(function(response) {
+    if (!response.ok) throw new Error("Network error");
+    return response.text();
+  })
+  .then(function() {
+    showMessage(t[currentLanguage].success, "success");
+    document.getElementById("email").value = "";
+    phoneInput.value = "";
+  })
+  .catch(function() {
+    showMessage(t[currentLanguage].error, "error");
+  })
+  .finally(function() {
+    btn.disabled = false;
+    btn.innerText = t[currentLanguage].button;
+  });
+});
+
+setLanguage(currentLanguage);
+</script>
+
+</body>
+</html>
